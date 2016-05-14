@@ -444,7 +444,7 @@ typedef NS_ENUM(NSInteger, BEMInternalTags)
             NSString *fullString = [NSString stringWithFormat:@"%@%@%@", prefix, mString, suffix];
             self.YAxisLabelXOffset = [fullString sizeWithAttributes:attributes].width + 2;//MAX([maxValueString sizeWithAttributes:attributes].width + 10,
                                      //    [minValueString sizeWithAttributes:attributes].width) + 5;
-            self.YAxisLabelXOffset += self.ys_YAxisLabelXOffsetPadding;
+            self.YAxisLabelXOffset += self.ys_yAxisLabelXOffsetPadding;
         } else {
             NSString *longestString = [NSString stringWithFormat:@"%i", (int)self.frame.size.height];
             self.YAxisLabelXOffset = [longestString sizeWithAttributes:attributes].width + 5;
