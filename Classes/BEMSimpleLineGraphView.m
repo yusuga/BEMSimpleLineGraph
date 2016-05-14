@@ -1568,9 +1568,11 @@ typedef NS_ENUM(NSInteger, BEMInternalTags)
     }
     
     if (self.minValue == self.maxValue && self.autoScaleYAxis == YES) positionOnYAxis = self.frame.size.height/2;
-    else if (self.autoScaleYAxis == YES) positionOnYAxis = ((self.frame.size.height - padding/2) - ((dotValue - self.minValue) / ((self.maxValue - self.minValue) / (self.frame.size.height - padding)))) + self.XAxisLabelYOffset/2;
-    else positionOnYAxis = ((self.frame.size.height) - dotValue);
-    
+    else if (self.autoScaleYAxis == YES) {
+        CGFloat height = self.frame.size.height - self.ys_yAxisAdjustmentHeight;
+        positionOnYAxis = ((height - padding/2) - ((dotValue - self.minValue) / ((self.maxValue - self.minValue) / (height - padding)))) + self.XAxisLabelYOffset/2;
+    } else positionOnYAxis = ((self.frame.size.height) - dotValue);
+        
     positionOnYAxis -= self.XAxisLabelYOffset;
     
     return positionOnYAxis;
