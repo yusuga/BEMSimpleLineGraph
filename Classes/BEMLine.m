@@ -150,7 +150,11 @@
     if (self.arrayOfPoints.count <= 2 && self.bezierCurveIsEnabled == YES) bezierStatus = NO;
     
     if (!self.disableMainLine && bezierStatus) {
-        line = [BEMLine quadCurvedPathWithPoints:self.points];
+        if (self.ys_overlayMainLineToBottom) {
+            line = [BEMLine quadCurvedPathWithPoints:[self ys_linePointsArray]];
+        } else {
+            line = [BEMLine quadCurvedPathWithPoints:self.points];
+        }
         fillBottom = [BEMLine quadCurvedPathWithPoints:self.bottomPointsArray];
         fillTop = [BEMLine quadCurvedPathWithPoints:self.topPointsArray];
     } else if (!self.disableMainLine && !bezierStatus) {
@@ -409,6 +413,16 @@ static CGPoint controlPointForPoints(CGPoint p1, CGPoint p2) {
     gradientLayer.contents = (id)image.CGImage;
     gradientLayer.mask = shapeLayer;
     return gradientLayer;
+}
+
+- (NSArray *)ys_linePointsArray {
+    NSMutableArray *linePoints = [NSMutableArray arrayWithCapacity:[self.points count]];
+    for (NSValue *value in self.points) {
+        CGPoint point = [value CGPointValue];
+        point.y += self.lineWidth/2.;
+        [linePoints addObject:[NSValue valueWithCGPoint:point]];
+    }
+    return [linePoints copy];
 }
 
 @end

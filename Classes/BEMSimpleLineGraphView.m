@@ -619,6 +619,8 @@ typedef NS_ENUM(NSInteger, BEMInternalTags)
     
     line.disableMainLine = self.displayDotsOnly;
     
+    line.ys_overlayMainLineToBottom = self.ys_overlayMainLineToBottom;
+    
     [self addSubview:line];
     [self sendSubviewToBack:line];
     [self sendSubviewToBack:self.backgroundXAxis];

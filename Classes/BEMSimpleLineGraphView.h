@@ -359,6 +359,7 @@ IB_DESIGNABLE @interface BEMSimpleLineGraphView : UIView <UIGestureRecognizerDel
 
 @property (nonatomic) CGFloat ys_YAxisLabelXOffsetPadding;
 @property (nonatomic) BOOL ys_notAdjustFirstAndLastOfXAxisLabel;
+@property (assign, nonatomic) BOOL ys_overlayMainLineToBottom;
 
 @end
 
