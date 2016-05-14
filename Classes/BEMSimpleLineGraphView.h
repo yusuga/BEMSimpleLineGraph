@@ -358,6 +358,7 @@ IB_DESIGNABLE @interface BEMSimpleLineGraphView : UIView <UIGestureRecognizerDel
 @property (nonatomic) BOOL displayDotsOnly;
 
 @property (nonatomic) CGFloat ys_YAxisLabelXOffsetPadding;
+@property (nonatomic) BOOL ys_notAdjustFirstAndLastOfXAxisLabel;
 
 @end
 

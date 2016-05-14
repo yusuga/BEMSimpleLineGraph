@@ -793,7 +793,7 @@ typedef NS_ENUM(NSInteger, BEMInternalTags)
         }
         
         BOOL fullyContainsLabel = CGRectContainsRect(self.bounds, label.frame);
-        if (!fullyContainsLabel) {
+        if (!fullyContainsLabel && (!self.ys_notAdjustFirstAndLastOfXAxisLabel || (idx != 0 && idx != [xAxisLabels count] - 1))) {
             [overlapLabels addObject:label];
         }
     }];
@@ -854,11 +854,15 @@ typedef NS_ENUM(NSInteger, BEMInternalTags)
     // Determine the horizontal translation to perform on the far left and far right labels
     // This property is negated when calculating the position of reference frames
     CGFloat horizontalTranslation;
-    if (index == 0) {
-        horizontalTranslation = lRect.size.width/2;
-    } else if (index+1 == numberOfPoints) {
-        horizontalTranslation = -lRect.size.width/2;
-    } else horizontalTranslation = 0;
+    if (self.ys_notAdjustFirstAndLastOfXAxisLabel) {
+        horizontalTranslation = 0;
+    } else {
+        if (index == 0) {
+            horizontalTranslation = lRect.size.width/2;
+        } else if (index+1 == numberOfPoints) {
+            horizontalTranslation = -lRect.size.width/2;
+        } else horizontalTranslation = 0;
+    }
     xAxisHorizontalFringeNegationValue = horizontalTranslation;
     
     // Determine the final x-axis position
