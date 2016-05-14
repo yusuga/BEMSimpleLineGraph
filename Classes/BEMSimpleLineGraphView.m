@@ -1035,6 +1035,11 @@ typedef NS_ENUM(NSInteger, BEMInternalTags)
         
         // Axis should fit into our own view
         BOOL fullyContainsLabel = CGRectContainsRect(self.bounds, label.frame);
+        
+        if (!self.clipsToBounds) {
+            fullyContainsLabel = !CGRectIsNull(CGRectIntersection(self.bounds, label.frame));
+        }
+        
         if (!fullyContainsLabel) {
             [overlapLabels addObject:label];
             [yAxisLabelPoints removeObject:@(label.center.y)];
