@@ -151,12 +151,12 @@
     
     if (!self.disableMainLine && bezierStatus) {
         if (self.ys_overlayMainLineToBottom) {
-            line = [BEMLine quadCurvedPathWithPoints:[self ys_linePointsArray]];
+            line = [BEMLine quadCurvedPathWithPoints:[self ys_linePointsArray] pointsToCloseFill:nil];
         } else {
-            line = [BEMLine quadCurvedPathWithPoints:self.points];
+            line = [BEMLine quadCurvedPathWithPoints:self.points pointsToCloseFill:nil];
         }
-        fillBottom = [BEMLine quadCurvedPathWithPoints:self.bottomPointsArray];
-        fillTop = [BEMLine quadCurvedPathWithPoints:self.topPointsArray];
+        fillBottom = [BEMLine quadCurvedPathWithPoints:self.points pointsToCloseFill:[self ys_bottomPointsToCloseFill]];
+        fillTop = [BEMLine quadCurvedPathWithPoints:self.points pointsToCloseFill:[self ys_topPointsToCloseFill]];
     } else if (!self.disableMainLine && !bezierStatus) {
         line = [BEMLine linesToPoints:self.points];
         fillBottom = [BEMLine linesToPoints:self.bottomPointsArray];
@@ -320,30 +320,32 @@
     return path;
 }
 
-+ (UIBezierPath *)quadCurvedPathWithPoints:(NSArray *)points {
++ (UIBezierPath *)quadCurvedPathWithPoints:(NSArray *)points pointsToCloseFill:(NSArray *)pointsToCloseFill {
     UIBezierPath *path = [UIBezierPath bezierPath];
-
-    NSValue *value = points[0];
-    CGPoint p1 = [value CGPointValue];
-    [path moveToPoint:p1];
-
-    if (points.count == 2) {
-        value = points[1];
-        CGPoint p2 = [value CGPointValue];
-        [path addLineToPoint:p2];
-        return path;
+    
+    __block CGPoint previousPoint;
+    [points enumerateObjectsUsingBlock:^(NSValue * _Nonnull pointValue, NSUInteger idx, BOOL * _Nonnull stop) {
+        CGPoint point = [pointValue CGPointValue];
+        
+        if (idx == 0) {
+            [path moveToPoint:point];
+        } else {
+            CGPoint midPoint = midPointForPoints(previousPoint, point);
+            [path addQuadCurveToPoint:midPoint controlPoint:previousPoint];
+            
+            if (idx == [points count] - 1) {
+                [path addQuadCurveToPoint:point controlPoint:midPoint];
+            }
+        }
+        
+        previousPoint = point;
+    }];
+    
+    for (NSValue *pointValue in pointsToCloseFill) {
+        CGPoint point = [pointValue CGPointValue];
+        [path addLineToPoint:point];
     }
-
-    for (NSUInteger i = 1; i < points.count; i++) {
-        value = points[i];
-        CGPoint p2 = [value CGPointValue];
-
-        CGPoint midPoint = midPointForPoints(p1, p2);
-        [path addQuadCurveToPoint:midPoint controlPoint:controlPointForPoints(midPoint, p1)];
-        [path addQuadCurveToPoint:p2 controlPoint:controlPointForPoints(midPoint, p2)];
-
-        p1 = p2;
-    }
+    
     return path;
 }
 
@@ -424,5 +426,15 @@ static CGPoint controlPointForPoints(CGPoint p1, CGPoint p2) {
     }
     return [linePoints copy];
 }
+
+- (NSArray *)ys_topPointsToCloseFill {
+    return @[[NSValue valueWithCGPoint:CGPointMake(self.frame.size.width, 0)],
+             [NSValue valueWithCGPoint:CGPointMake(0,0)]];
+}
+
+- (NSArray *)ys_bottomPointsToCloseFill {
+    return @[[NSValue valueWithCGPoint:CGPointMake(self.frame.size.width, self.frame.size.height)],
+             [NSValue valueWithCGPoint:CGPointMake(0, self.frame.size.height)]];
+};
 
 @end
