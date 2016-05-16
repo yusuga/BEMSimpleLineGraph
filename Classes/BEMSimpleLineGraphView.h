@@ -361,6 +361,8 @@ IB_DESIGNABLE @interface BEMSimpleLineGraphView : UIView <UIGestureRecognizerDel
 @property (nonatomic) BOOL ys_notAdjustFirstAndLastOfXAxisLabel;
 @property (assign, nonatomic) BOOL ys_overlayMainLineToBottom;
 @property (nonatomic) CGFloat ys_yAxisAdjustmentHeight;
+@property (nonatomic) UIColor *ys_colorReferenceXAxisMainLines;
+@property (nonatomic) UIColor *ys_colorReferenceXAxisSubLines;
 
 @end
 

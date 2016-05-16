@@ -89,6 +89,10 @@ typedef NS_ENUM(NSUInteger, BEMLineGradientDirection) {
 @property (assign, nonatomic) BOOL disableMainLine;
 
 @property (assign, nonatomic) BOOL ys_overlayMainLineToBottom;
+@property (strong, nonatomic) NSArray *ys_referenceXAxisLabelMainPoints;
+@property (nonatomic) UIColor *ys_colorReferenceXAxisMainLines;
+@property (strong, nonatomic) NSArray *ys_referenceXAxisLabelSubPoints;
+@property (nonatomic) UIColor *ys_colorReferenceXAxisSubLines;
 
 //----- COLORS -----//
 

@@ -164,8 +164,40 @@
     } else {
         fillBottom = [BEMLine linesToPoints:self.bottomPointsArray];
         fillTop = [BEMLine linesToPoints:self.topPointsArray];
+    }    
+    
+    // Draw reference XAxis main and sub lines
+    
+    if ([self.ys_referenceXAxisLabelMainPoints count] && self.ys_colorReferenceXAxisMainLines) {
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSaveGState(context);
+        CGContextSetLineWidth(context, 1.);
+        [self.ys_colorReferenceXAxisMainLines setStroke];
+        
+        for (NSNumber *xNum in self.ys_referenceXAxisLabelMainPoints) {
+            CGContextMoveToPoint(context, xNum.floatValue, self.frame.size.height);
+            CGContextAddLineToPoint(context, xNum.floatValue, 0);
+        }
+        
+        CGContextStrokePath(context);
+        CGContextRestoreGState(context);
     }
-
+    if ([self.ys_referenceXAxisLabelSubPoints count] && self.ys_colorReferenceXAxisSubLines) {
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSaveGState(context);
+        CGContextSetLineWidth(context, 1.);
+        [self.ys_colorReferenceXAxisSubLines setStroke];
+        
+        for (NSNumber *xNum in self.ys_referenceXAxisLabelSubPoints) {
+            CGContextMoveToPoint(context, xNum.floatValue, self.frame.size.height);
+            CGContextAddLineToPoint(context, xNum.floatValue, 0);
+        }
+        
+        CGContextStrokePath(context);
+        CGContextRestoreGState(context);
+    }
+    
+    
     //----------------------------//
     //----- Draw Fill Colors -----//
     //----------------------------//

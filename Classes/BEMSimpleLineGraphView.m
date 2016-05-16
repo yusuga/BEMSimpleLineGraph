@@ -59,6 +59,9 @@ typedef NS_ENUM(NSInteger, BEMInternalTags)
     
     /// All of the X-Axis Labels
     NSMutableArray *xAxisLabels;
+    
+    NSMutableArray *ys_referenceXAxisLabelMainPoints;
+    NSMutableArray *ys_referenceXAxisLabelSubPoints;
 }
 
 /// The vertical line which appears when the user drags across the graph
@@ -197,6 +200,9 @@ typedef NS_ENUM(NSInteger, BEMInternalTags)
     dataPoints = [NSMutableArray array];
     xAxisLabels = [NSMutableArray array];
     yAxisValues = [NSMutableArray array];
+    
+    ys_referenceXAxisLabelMainPoints = [NSMutableArray array];
+    ys_referenceXAxisLabelSubPoints = [NSMutableArray array];
 
     // Initialize BEM Objects
     _averageLine = [[BEMAverageLine alloc] init];
@@ -566,7 +572,7 @@ typedef NS_ENUM(NSInteger, BEMInternalTags)
 
 - (void)drawLine {
     for (UIView *subview in [self subviews]) {
-        if ([subview isKindOfClass:[BEMLine class]])
+        if ([subview isKindOfClass:[BEMLine class]])            
             [subview removeFromSuperview];
     }
     
@@ -620,10 +626,14 @@ typedef NS_ENUM(NSInteger, BEMInternalTags)
     line.disableMainLine = self.displayDotsOnly;
     
     line.ys_overlayMainLineToBottom = self.ys_overlayMainLineToBottom;
+    line.ys_referenceXAxisLabelMainPoints = [ys_referenceXAxisLabelMainPoints copy];
+    line.ys_colorReferenceXAxisMainLines = self.ys_colorReferenceXAxisMainLines;
+    line.ys_referenceXAxisLabelSubPoints = [ys_referenceXAxisLabelSubPoints copy];
+    line.ys_colorReferenceXAxisSubLines = self.ys_colorReferenceXAxisSubLines;
     
     [self addSubview:line];
     [self sendSubviewToBack:line];
-    [self sendSubviewToBack:self.backgroundXAxis];
+    [self sendSubviewToBack:self.backgroundXAxis];    
     
     [self didFinishDrawingIncludingYAxis:NO];
 }
@@ -642,6 +652,9 @@ typedef NS_ENUM(NSInteger, BEMInternalTags)
     [xAxisLabels removeAllObjects];
     [xAxisLabelPoints removeAllObjects];
     xAxisHorizontalFringeNegationValue = 0.0;
+    
+    [ys_referenceXAxisLabelMainPoints removeAllObjects];
+    [ys_referenceXAxisLabelSubPoints removeAllObjects];
     
     // Draw X-Axis Background Area
     self.backgroundXAxis = [[UIView alloc] initWithFrame:[self drawableXAxisArea]];
@@ -772,6 +785,12 @@ typedef NS_ENUM(NSInteger, BEMInternalTags)
                     } else {
                         NSNumber *xAxisLabelCoordinate = [NSNumber numberWithFloat:labelXAxis.center.x - self.YAxisLabelXOffset];
                         [xAxisLabelPoints addObject:xAxisLabelCoordinate];
+                    }
+                    
+                    if (labelXAxis.text.length) {
+                        [ys_referenceXAxisLabelMainPoints addObject:@(labelXAxis.center.x)];
+                    } else {
+                        [ys_referenceXAxisLabelSubPoints addObject:@(labelXAxis.center.x)];
                     }
                     
                     [self addSubview:labelXAxis];
