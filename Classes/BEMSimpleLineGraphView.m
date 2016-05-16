@@ -9,6 +9,53 @@
 
 #import "BEMSimpleLineGraphView.h"
 
+@interface BEMLatestXAxisLineView : UIView
+
+@property (nonatomic) CGSize lineSize;
+@property (nonatomic) CGSize triangleSize;
+@property (nonatomic) UIColor *color;
+
+@end
+
+@implementation BEMLatestXAxisLineView
+
+- (instancetype)initWithOrigin:(CGPoint)origin
+                      lineSize:(CGSize)lineSize
+                  triangleSize:(CGSize)triangleSize
+                         color:(UIColor *)color;
+{
+    if (self = [super initWithFrame:CGRectMake(origin.x, origin.y, triangleSize.width, lineSize.height + triangleSize.height)]) {
+        self.lineSize = lineSize;
+        self.triangleSize = triangleSize;
+        self.color = color;
+        self.backgroundColor = [UIColor clearColor];
+    }
+    return self;
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    [super drawRect:rect];
+
+    CGFloat centerX = rect.size.width/2.;
+    CGContextRef context = UIGraphicsGetCurrentContext();
+
+    [self.color setStroke];
+    CGContextSetLineWidth(context, self.lineSize.width);
+    CGContextMoveToPoint(context, centerX, 0);
+    CGContextAddLineToPoint(context, centerX, rect.size.height - self.triangleSize.height);
+    CGContextStrokePath(context);
+
+    [self.color setFill];
+    CGContextMoveToPoint(context, centerX, rect.size.height - self.triangleSize.height - 1.);;
+    CGContextAddLineToPoint(context, 0., rect.size.height);
+    CGContextAddLineToPoint(context, rect.size.width, rect.size.height);
+    CGContextClosePath(context);
+    CGContextFillPath(context);
+}
+
+@end
+
 const CGFloat BEMNullGraphValue = CGFLOAT_MAX;
 
 
@@ -633,9 +680,25 @@ typedef NS_ENUM(NSInteger, BEMInternalTags)
     
     [self addSubview:line];
     [self sendSubviewToBack:line];
-    [self sendSubviewToBack:self.backgroundXAxis];    
+    [self sendSubviewToBack:self.backgroundXAxis];
+    
+    [self drawRecentXAxisWithLine:line];
     
     [self didFinishDrawingIncludingYAxis:NO];
+}
+
+- (void)drawRecentXAxisWithLine:(BEMLine *)line
+{    
+    if (self.ys_colorLatestXAxisLine) {
+        CGFloat lineWidth = 1.;
+        CGSize triangleSize = CGSizeMake(6., 5.);
+        
+        UIView *view = [[BEMLatestXAxisLineView alloc] initWithOrigin:CGPointMake(CGRectGetMaxX(line.frame) - triangleSize.width/2., 0.)
+                                                             lineSize:CGSizeMake(lineWidth, line.bounds.size.height)
+                                                         triangleSize:triangleSize
+                                                                color:self.ys_colorLatestXAxisLine];
+        [self addSubview:view];
+    }
 }
 
 - (void)drawXAxis {
