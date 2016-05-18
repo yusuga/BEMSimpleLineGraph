@@ -295,8 +295,8 @@ typedef NS_ENUM(NSInteger, BEMInternalTags)
     
     if (CGSizeEqualToSize(self.currentViewSize, self.bounds.size))  return;
     self.currentViewSize = self.bounds.size;
-
-    [self drawGraph];
+    
+    [self reloadGraph];
 }
 
 - (void)layoutNumberOfPoints {
@@ -619,8 +619,11 @@ typedef NS_ENUM(NSInteger, BEMInternalTags)
 
 - (void)drawLine {
     for (UIView *subview in [self subviews]) {
-        if ([subview isKindOfClass:[BEMLine class]])            
+        if ([subview isKindOfClass:[BEMLine class]] &&
+            [subview isKindOfClass:[BEMLatestXAxisLineView class]])
+        {
             [subview removeFromSuperview];
+        }
     }
     
     BEMLine *line = [[BEMLine alloc] initWithFrame:[self drawableGraphArea]];
