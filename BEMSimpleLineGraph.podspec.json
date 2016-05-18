@@ -1,6 +1,6 @@
 {
   "name": "BEMSimpleLineGraph",
-  "version": "4.1.1",
+  "version": "4.1.1.0",
   "summary": "Elegant Line Graphs for iOS (charting library)",
   "description": "BEMSimpleLineGraph lets you create highly customizable line graphs / charts for iOS.",
   "homepage": "https://github.com/Boris-Em/BEMSimpleLineGraph",
@@ -20,8 +20,8 @@
   },
   "requires_arc": true,
   "source": {
-    "git": "https://github.com/Boris-Em/BEMSimpleLineGraph.git",
-    "tag": "v4.1.1"
+    "git": "https://github.com/yusuga/BEMSimpleLineGraph.git",
+    "tag": "v4.1.1.0-yusuga"
   },
   "source_files": [
     "Classes",
