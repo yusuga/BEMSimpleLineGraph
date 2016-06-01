@@ -866,6 +866,9 @@ typedef NS_ENUM(NSInteger, BEMInternalTags)
             }
         }
     }
+    
+    if (self.ys_allowsOverlapXAxisLabels) return;
+    
     __block NSUInteger lastMatchIndex;
     
     NSMutableArray *overlapLabels = [NSMutableArray arrayWithCapacity:0];
